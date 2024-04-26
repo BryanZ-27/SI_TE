@@ -6,7 +6,7 @@ library(ggplot2)
 
 ###load data
 load("./Data_for_Fig6.RData")
-save(fig.6ab_data, fig.6c_data, fig.6c_summ, fig.6d_data, fig.6d_summ, fig.6e_data, fig.6f_data, fig.6g1_data, fig.6g2_data, chr_rect, Interval_rect, SI_Geneverify_gene_comparisons_list, TE_Geneverify_gene_comparisons_list, SI_Geneverify_gene_name_sort, chr_marker_id_mean, file = "./Data_for_Fig6.RData")
+
 
 
 ###main
