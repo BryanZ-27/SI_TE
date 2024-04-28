@@ -1,2 +1,2 @@
 # SI_TE
-codes for the paper "A Hidden Genetic Link between Translational Fidelity and Longevity"
+codes for the paper "Translational Fidelity and Longevity are genetically linked"
