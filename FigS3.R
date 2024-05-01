@@ -1,5 +1,4 @@
 ###library
-library(dplyr)
 library(ggplot2)
 
 
@@ -10,23 +9,26 @@ load("./Data_for_FigS3.RData")
 
 
 ###main
-Fig.S3 <- fig.s3_data %>%
-  ggplot(aes(x=OD_range, y=OD_time_shift, fill=`Correlation with the star`,group=interaction(Calculate_Method)))+
-  geom_tile()+
-  scale_fill_gradient(low = "#FFFFDF", high = "#D73027")+
-  facet_wrap(~Calculate_Method,labeller =as_labeller(c(`1`="Day2 min",`2`="Median",`3`="Day2 mean")))+
-  labs(x="OD range",y="Time shift")+
-  scale_x_discrete(labels=c("[0.2, 0.5]","[0.25, 0.75]","[0.3, 0.8]"))+
-  theme_classic()+
-  theme(axis.text= element_text(size=9,face = "bold", color = "black"),
-        axis.title = element_text(size=10,face = "bold", color = "black"),
-        axis.text.x = element_blank(),
-        panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
-        legend.background = element_blank(),
-        legend.title = element_blank(),
-        strip.text = element_text(size=8,color = "black",face = "bold"))
+FigureS3  <- ggplot()+
+  geom_point(aes(mean_score, no, color = mean_score), fig.s3a_summ, size = 2)+
+  geom_errorbar(aes(xmin = mean_score - sd_score, 
+                    xmax = ifelse(mean_score + sd_score > 1, 1, mean_score + sd_score), 
+                    y = no, color = mean_score), fig.s3a_summ, width = 10, linewidth = 0.5)+
+  geom_freqpoly(aes(value), fig.s3b_data, color = "#aadaa8", binwidth = 0.02) + 
+  scale_color_gradient(low = "#4daf4a", high = "#295c27")+
+  scale_x_continuous(name = "The fraction of reads consistent with 
+  the genotype data among all reads 
+                     aligned to a segregating site", 
+                     limits = c(0.4, 1), breaks = seq(0.4, 1, 0.1))+
+  scale_y_continuous(name = "Count", 
+                     sec.axis = sec_axis(~., name = "Strains"))+
+  theme_classic()+theme(axis.text=element_text(size = 9, face = "bold", color = "black"),
+                        axis.title = element_text(size = 10, face = "bold", color = "black"),
+                        axis.text.y.right = element_blank(),
+                        panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
+                        legend.position = "none")
 
 
 
 ###save
-ggsave(paste("./Fig.S3_", Sys.Date(), ".pdf", sep = ""), Fig.S3, width = 12, height = 8-0.5, units = "cm")
+ggsave(paste("./Fig.S3_", Sys.Date(), ".pdf", sep = ""), FigureS3, width = 8, height = 9, units = "cm")

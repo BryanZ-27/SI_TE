@@ -1,36 +1,220 @@
 ###library
+library(dplyr)
 library(ggplot2)
+library(cowplot)
 
 
 
 ###load data
-fig.s2b_data <- FIG.S2.B_For_plot_ob
-save(fig.s2a_summ, fig.s2b_data, file = "./Data_for_FigS2.RData")
 load("./Data_for_FigS2.RData")
 
 
 
 ###main
-FigureS2  <- ggplot()+
-  geom_point(aes(mean_score, no, color = mean_score), fig.s2a_summ, size = 2)+
-  geom_errorbar(aes(xmin = mean_score - sd_score, 
-                    xmax = ifelse(mean_score + sd_score > 1, 1, mean_score + sd_score), 
-                    y = no, color = mean_score), fig.s2a_summ, width = 10, linewidth = 0.5)+
-  geom_freqpoly(aes(value), fig.s2b_data, color = "#aadaa8", binwidth = 0.02) + 
-  scale_color_gradient(low = "#4daf4a", high = "#295c27")+
-  scale_x_continuous(name = "The fraction of reads consistent with 
-  the genotype data among all reads 
-                     aligned to a segregating site", 
-                     limits = c(0.4, 1), breaks = seq(0.4, 1, 0.1))+
-  scale_y_continuous(name = "Count", 
-                     sec.axis = sec_axis(~., name = "Strains"))+
-  theme_classic()+theme(axis.text=element_text(size = 9, face = "bold", color = "black"),
-                        axis.title = element_text(size = 10, face = "bold", color = "black"),
-                        axis.text.y.right = element_blank(),
-                        panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
-                        legend.position = "none")
+##set colors
+figs2_color <- c("#97cd96", "#70bb6f", "#4da74a", "#3b8239", "#285a2f")
+
+
+##s2 alter D
+#adjust y-axis
+figs2_alterD_data <- figs2_alterD_data_final %>%
+  filter(Ed_cutoff != 0.08) %>% 
+  mutate(adjust_rho = -rho*30) %>% 
+  group_by(Ed_cutoff, P) %>%
+  summarise(mean_rho = mean(rho), sd_rho = sd(rho), 
+            adjust_mean_rho = mean(adjust_rho)+2, adjust_sd_rho = sd(adjust_rho), 
+            mean_p.value = mean(p.value), sd_p.value = sd(p.value)) %>%
+  ungroup() %>% 
+  mutate(adjust_mean_p.value = log10(mean_p.value)*3-2)
+
+#draw figures with different D
+fig.s2.D <- figs2_alterD_data %>% 
+  ggplot() +
+  geom_bar(aes(x = P, y = adjust_mean_rho, fill = as.factor(P)), 
+           stat = "identity", position = position_dodge(width = 0.10), width = 0.10) +
+  geom_bar(aes(x = P, y = adjust_mean_p.value, fill = as.factor(P)), 
+           stat = "identity", position = position_dodge(width = 0.10), width = 0.01) +
+  geom_errorbar(aes(x = P, ymin = adjust_mean_rho - adjust_sd_rho, 
+                    ymax = adjust_mean_rho + adjust_sd_rho, color = as.factor(P)), 
+                stat = "identity", position = position_dodge(width = 0.10), width = 0.05) + 
+  geom_point(aes(x = P, y = adjust_mean_p.value, fill = as.factor(P)), 
+             position = position_dodge(width = 0.10), size=2, color = rep(figs2_color, 4), shape = 21) +
+  geom_abline(slope = 0, intercept = log10(0.05)*3-2, color = "red", linewidth = 0.8, linetype = 2) +
+  geom_abline(slope = 0, intercept = 0, color = "white", linewidth = 5) +
+  facet_grid(rows = vars(Ed_cutoff)) +
+  geom_text(aes(label = paste("italic(D)==", Ed_cutoff, sep = "")), 
+            x = -0.05, y = 20, parse = T, hjust = 0, size = 8/.pt) +
+  scale_fill_manual(values = figs2_color) +
+  scale_color_manual(values = figs2_color) +
+  scale_x_continuous(limits = c(-0.1, 0.9), breaks = seq(0, 0.8, 0.2), labels = c("0%", "20%", "40%", "60%", "80%")) +
+  scale_y_continuous(limits = c(-23, 24), 
+                     breaks=c(-20, -14, -8, -2, 2, 8, 14, 20), 
+                     labels = c(expression(10^-6), expression(10^-4), expression(10^-2), 0, 
+                                0, -6/30, -12/30, -18/30)) +
+  theme_classic() +
+  theme(axis.text = element_text(size = 9, face = "bold", color = "black"),
+        axis.title = element_blank(),
+        axis.text.x = element_text(),
+        axis.title.x = element_blank(),
+        axis.text.y = element_blank(),
+        strip.text = element_blank(), 
+        strip.background = element_blank(),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        legend.position = "none")
+
+
+##s2 alter alpha
+#adjust y-axis
+figs2_alterA_data <- figs2_alterA_data_final %>% 
+  filter(Alpha != 1.8) %>% 
+  mutate(adjust_rho = -rho*30) %>% 
+  group_by(Alpha, P) %>%
+  summarise(mean_rho = mean(rho), sd_rho = sd(rho), 
+            adjust_mean_rho = mean(adjust_rho)+2, adjust_sd_rho = sd(adjust_rho), 
+            mean_p.value = mean(p.value), sd_p.value = sd(p.value)) %>%
+  ungroup() %>% 
+  mutate(adjust_mean_p.value = log10(mean_p.value)*3-2)
+
+#draw figures with different alpha
+fig.s2.A <- figs2_alterA_data %>% 
+  ggplot()+
+  geom_bar(aes(x = P, y = adjust_mean_rho, fill = as.factor(P)), 
+           stat = "identity", position = position_dodge(width = 0.10), width = 0.10) +
+  geom_bar(aes(x = P, y = adjust_mean_p.value, fill = as.factor(P)), 
+           stat = "identity", position = position_dodge(width = 0.10), width = 0.01) +
+  geom_errorbar(aes(x = P, ymin = adjust_mean_rho - adjust_sd_rho, 
+                    ymax = adjust_mean_rho + adjust_sd_rho, color = as.factor(P)), 
+                stat = "identity", position = position_dodge(width = 0.10), width = 0.05) + 
+  geom_point(aes(x = P, y = adjust_mean_p.value, fill = as.factor(P)), 
+             position = position_dodge(width = 0.10), size = 2, color = rep(figs2_color, 4), shape=21) +
+  geom_abline(slope = 0, intercept = log10(0.05)*3-2, color = "red", linewidth = 0.8, linetype = 2) +
+  geom_abline(slope = 0, intercept = 0, color = "white", linewidth = 5) +
+  facet_grid(rows = vars(Alpha)) +
+  geom_text(aes(label = paste("alpha==", Alpha, sep = "")), x = -0.05, y = 20, parse = T, hjust = 0, size = 8/.pt) +
+  scale_fill_manual(values = figs2_color) +
+  scale_color_manual(values = figs2_color) +
+  scale_x_continuous(limits = c(-0.1,0.9), breaks = seq(0, 0.8, 0.2), labels = c("0%", "20%", "40%", "60%", "80%")) +
+  scale_y_continuous(limits = c(-23, 24), 
+                     breaks = c(-20, -14, -8, -2, 2, 8, 14, 20), 
+                     labels = c(expression(10^-6), expression(10^-4), expression(10^-2), 0, 
+                                0, -6/30, -12/30, -18/30)) +
+  theme_classic() +
+  theme(axis.text=element_text(size=9,face = "bold", color = "black"),
+        axis.text.x = element_text(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        strip.text = element_blank(), 
+        strip.background = element_blank(),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        legend.position = "none")
+
+
+##s2 alter U
+#adjust y-axis
+figs2_alterU_data <- figs2_alterU_data_final %>%
+  mutate(adjust_rho = -rho*30) %>% 
+  group_by(Em, P) %>%
+  summarise(mean_rho = mean(rho), sd_rho = sd(rho), 
+            adjust_mean_rho = mean(adjust_rho)+2, adjust_sd_rho = sd(adjust_rho), 
+            mean_p.value = mean(p.value), sd_p.value = sd(p.value)) %>%
+  ungroup() %>% 
+  mutate(adjust_mean_p.value = log10(mean_p.value)*3-2)
+
+#draw figures with different U
+fig.s2.U <- figs2_alterU_data %>% 
+  ggplot() +
+  geom_bar(aes(x = P, y = adjust_mean_rho, fill = as.factor(P)), 
+           stat = "identity", position = position_dodge(width = 0.10), width = 0.10) +
+  geom_bar(aes(x = P, y = adjust_mean_p.value, fill = as.factor(P)), 
+           stat = "identity", position = position_dodge(width = 0.10), width = 0.01) +
+  geom_errorbar(aes(x = P, ymin = adjust_mean_rho - adjust_sd_rho, 
+                    ymax = adjust_mean_rho + adjust_sd_rho, color = as.factor(P)), 
+                stat = "identity", position = position_dodge(width = 0.10), width = 0.05) + 
+  geom_point(aes(x = P, y = adjust_mean_p.value, fill = as.factor(P)), 
+             position = position_dodge(width = 0.10), size = 2, color = rep(figs2_color, 4), shape = 21) +
+  geom_abline(slope = 0, intercept = log10(0.05)*3-2, color = "red", linewidth = 0.8, linetype = 2) +
+  geom_abline(slope = 0, intercept = 0, color = "white", linewidth = 5) +
+  facet_grid(rows = vars(Em)) +
+  geom_text(aes(label = paste("italic(U)==", Em, sep = "")), x = -0.05, y = 20, parse = T, hjust = 0, size = 8/.pt) +
+  scale_fill_manual(values = figs2_color) +
+  scale_color_manual(values = figs2_color) +
+  scale_x_continuous(limits = c(-0.1,0.9), breaks = seq(0, 0.8, 0.2), labels = c("0%", "20%", "40%", "60%", "80%")) +
+  scale_y_continuous(limits = c(-23, 24), 
+                     breaks = c(-20, -14, -8, -2, 2, 8, 14, 20), 
+                     labels = c(expression(10^-6), expression(10^-4), expression(10^-2), 0, 
+                                0, -6/30, -12/30, -18/30)) +
+  theme_classic() +
+  theme(axis.text = element_text(size = 9, face = "bold", color = "black"),
+        axis.text.x = element_text(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        strip.text = element_blank(),
+        strip.background = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.position = "none")
+
+
+##s2 alter L
+#adjust y-axis
+figs2_alterL_data <- figs2_alterL_data_final %>%
+  filter(El != 7e-4) %>% 
+  mutate(adjust_rho = -rho*30) %>% 
+  group_by(El, P) %>%
+  summarise(mean_rho = mean(rho), sd_rho = sd(rho), 
+            adjust_mean_rho = mean(adjust_rho)+2, adjust_sd_rho = sd(adjust_rho), 
+            mean_p.value = mean(p.value), sd_p.value = sd(p.value)) %>%
+  ungroup() %>% 
+  mutate(adjust_mean_p.value = log10(mean_p.value)*3-2)
+
+#draw figures with different L
+fig.s2.L <- figs2_alterL_data %>% 
+  ggplot() +
+  geom_bar(aes(x = P, y = adjust_mean_rho, fill = as.factor(P)), 
+           stat = "identity", position = position_dodge(width = 0.10), width = 0.10) +
+  geom_bar(aes(x = P, y = adjust_mean_p.value, fill = as.factor(P)), 
+           stat = "identity", position = position_dodge(width = 0.10), width = 0.01) +
+  geom_errorbar(aes(x = P, ymin = adjust_mean_rho - adjust_sd_rho, 
+                    ymax = adjust_mean_rho + adjust_sd_rho, color = as.factor(P)), 
+                stat = "identity", position = position_dodge(width = 0.10), width = 0.05) + 
+  geom_point(aes(x = P, y = adjust_mean_p.value, fill = as.factor(P)), 
+             position = position_dodge(width = 0.10), size = 2, color = rep(figs2_color, 4), shape = 21) +
+  geom_abline(slope = 0, intercept = log10(0.05)*3-2, color = "red", linewidth = 0.8, linetype = 2) +
+  geom_abline(slope = 0, intercept = 0, color = "white", linewidth = 5) +
+  facet_grid(rows = vars(El)) +
+  geom_text(aes(label = paste("italic(L)==", El, sep = "")), x = -0.05, y = 20, parse = T, hjust = 0, size = 8/.pt) +
+  scale_fill_manual(values = figs2_color) +
+  scale_color_manual(values = figs2_color) +
+  scale_x_continuous(limits = c(-0.1,0.9), breaks = seq(0, 0.8, 0.2), labels = c("0%", "20%", "40%", "60%", "80%")) +
+  scale_y_continuous(limits = c(-23, 24), 
+                     breaks=c(-20, -14, -8, -2, 2, 8, 14, 20), 
+                     labels = c(expression(10^-6), expression(10^-4), expression(10^-2), 0, 
+                                0, -6/30, -12/30, -18/30))+
+  theme_classic() +
+  theme(axis.text = element_text(size = 9, face = "bold", color = "black"),
+        axis.text.x = element_text(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        strip.text = element_blank(),
+        strip.background = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.position = "none")
+
+
+##combine figures
+fig.s2 <- ggdraw()+
+  draw_plot(fig.s2.D, x = 0, y = 0, width = 0.25, height = 1) +
+  draw_plot(fig.s2.A, x = 0.25, y = 0, width = 0.25, height = 1) +
+  draw_plot(fig.s2.U, x = 0.50, y = 0, width = 0.25, height = 1) +
+  draw_plot(fig.s2.L, x = 0.75, y = 0, width = 0.25, height = 1)
 
 
 
 ###save
-ggsave(paste("./Fig.S2_", Sys.Date(), ".pdf", sep = ""), FigureS2, width = 8, height = 9, units = "cm")
+ggsave(paste("./FigS2_", Sys.Date(), ".pdf", sep = ""), fig.s2, width = 17, height = 22, units = "cm")
