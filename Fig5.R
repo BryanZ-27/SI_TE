@@ -5,13 +5,13 @@ library(ggplot2)
 
 
 ###load data
-load("./Data_for_Fig6.RData")
+load("./Data_for_Fig5.RData")
 
 
 
 ###main
 #figure A and B
-FIG6.A <- fig.6ab_data %>%
+FIG5.A <- fig.5ab_data %>%
   ggplot()+
   geom_rect(data = chr_rect[seq(1,15,by=2),],mapping = aes(xmin = x1,xmax=x2, fill=c), ymin = -Inf,ymax = Inf,show.legend = F)+
   geom_point(aes(x=Marker_id,y=value,color=variable), size = 0.1)+
@@ -29,7 +29,7 @@ FIG6.A <- fig.6ab_data %>%
         panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
         legend.text = element_text(size=8,face = "bold"),legend.position = "none")
 
-FIG6.B <- fig.6ab_data %>%
+FIG5.B <- fig.5ab_data %>%
   filter(chr == 10) %>%
   mutate(Marker_pos = as.numeric(gsub("\\d+_chr[IXV+]_(\\d+)_.*","\\1",Marker))) %>%
   filter(Marker_pos <= 700e3, Marker_pos >= 600e3) %>% 
@@ -51,17 +51,17 @@ FIG6.B <- fig.6ab_data %>%
         legend.text = element_text(size=8,face = "bold"),legend.position = "none")
 
 #figure C
-FIG6.C <- fig.6c_data %>%
+FIG5.C <- fig.5c_data %>%
   na.omit() %>%
   ggplot(group=!!sym("6487936_chrX_655475_C_T"))+
   geom_point(aes(x=!!sym("6487936_chrX_655475_C_T"),y=pheno,color = !!sym("6487936_chrX_655475_C_T")),position = position_jitter(w = 0.2, h = 0), 
              size = 0.3)+
-  geom_errorbar(aes(ymin=fig.6c_summ$m[1]-fig.6c_summ$se[1],ymax=fig.6c_summ$m[1]+fig.6c_summ$se[1],x=1),
+  geom_errorbar(aes(ymin=fig.5c_summ$m[1]-fig.5c_summ$se[1],ymax=fig.5c_summ$m[1]+fig.5c_summ$se[1],x=1),
                 size=0.3,width=0.2)+
-  geom_errorbar(aes(ymin=fig.6c_summ$m[2]-fig.6c_summ$se[2],ymax=fig.6c_summ$m[2]+fig.6c_summ$se[2],x=2),
+  geom_errorbar(aes(ymin=fig.5c_summ$m[2]-fig.5c_summ$se[2],ymax=fig.5c_summ$m[2]+fig.5c_summ$se[2],x=2),
                 size=0.3,width=0.2)+
-  geom_segment(aes(y = fig.6c_summ$m[1], yend = fig.6c_summ$m[1], x = 0.75, xend = 1.25), size = 0.3)+
-  geom_segment(aes(y = fig.6c_summ$m[2], yend = fig.6c_summ$m[2], x = 1.75, xend = 2.25), size = 0.3)+
+  geom_segment(aes(y = fig.5c_summ$m[1], yend = fig.5c_summ$m[1], x = 0.75, xend = 1.25), size = 0.3)+
+  geom_segment(aes(y = fig.5c_summ$m[2], yend = fig.5c_summ$m[2], x = 1.75, xend = 2.25), size = 0.3)+
   scale_x_discrete(labels= c("BY allele","RM allele"))+
   scale_color_manual(values = c("#e5d851", "#8c07bb"))+
   scale_y_continuous(limits=c(6.5,13), breaks = seq(7, 13, 2), labels = seq(7, 13, 2))+
@@ -74,17 +74,17 @@ FIG6.C <- fig.6c_data %>%
                         legend.position = "none")
 
 #figure D
-FIG6.D <- fig.6d_data %>%
+FIG5.D <- fig.5d_data %>%
   na.omit() %>%
   ggplot(group=!!sym("6487936_chrX_655475_C_T"))+
   geom_point(aes(x=!!sym("6487936_chrX_655475_C_T"),y=pheno,color = !!sym("6487936_chrX_655475_C_T")),position = position_jitter(w = 0.2, h = 0), 
              size = 0.3)+
-  geom_errorbar(aes(ymin=fig.6d_summ$m[1]-fig.6d_summ$se[1],ymax=fig.6d_summ$m[1]+fig.6d_summ$se[1],x=1),
+  geom_errorbar(aes(ymin=fig.5d_summ$m[1]-fig.5d_summ$se[1],ymax=fig.5d_summ$m[1]+fig.5d_summ$se[1],x=1),
                 size=0.3,width=0.2)+
-  geom_errorbar(aes(ymin=fig.6d_summ$m[2]-fig.6d_summ$se[2],ymax=fig.6d_summ$m[2]+fig.6d_summ$se[2],x=2),
+  geom_errorbar(aes(ymin=fig.5d_summ$m[2]-fig.5d_summ$se[2],ymax=fig.5d_summ$m[2]+fig.5d_summ$se[2],x=2),
                 size=0.3,width=0.2)+
-  geom_segment(aes(y = fig.6d_summ$m[1], yend = fig.6d_summ$m[1], x = 0.75, xend = 1.25), size = 0.3)+
-  geom_segment(aes(y = fig.6d_summ$m[2], yend = fig.6d_summ$m[2], x = 1.75, xend = 2.25), size = 0.3)+
+  geom_segment(aes(y = fig.5d_summ$m[1], yend = fig.5d_summ$m[1], x = 0.75, xend = 1.25), size = 0.3)+
+  geom_segment(aes(y = fig.5d_summ$m[2], yend = fig.5d_summ$m[2], x = 1.75, xend = 2.25), size = 0.3)+
   scale_x_discrete(labels= c("BY allele","RM allele"))+
   scale_color_manual(values = c("#e5d851", "#8c07bb"))+
   scale_y_continuous(limits=c(0.00065,0.0013), breaks = seq(7e-4, 13e-4, 2e-4), labels = seq(7e-4, 13e-4, 2e-4))+
@@ -97,7 +97,7 @@ FIG6.D <- fig.6d_data %>%
                         legend.position = "none")
 
 #figure E and F
-FIG6.E <- fig.6e_data %>% 
+FIG5.E <- fig.5e_data %>% 
   mutate(strains = ifelse(strains %in% c("BY4716"),"BY",ifelse(strains %in% c("RM11"),"RM",strains))) %>%
   dplyr::mutate(strains_sort = SI_Geneverify_gene_name_sort[[strains]]) %>%
   mutate(strains_col = case_when(strains %in% c("BY") ~ 1,
@@ -118,7 +118,7 @@ FIG6.E <- fig.6e_data %>%
                         panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
                         legend.text = element_text(size=15,face = "bold"),legend.title = element_text(size=15,face = "bold"))
 
-FIG6.F <- fig.6f_data %>%
+FIG5.F <- fig.5f_data %>%
   ggplot(aes(x=reorder(strain,strain_sort),y=TE))+
   geom_boxplot(aes(fill = as.factor(strain_col)),show.legend = F, size = 0.4)+
   stat_compare_means(aes(label = ..p.format..),comparisons = TE_Geneverify_gene_comparisons_list,
@@ -135,7 +135,7 @@ FIG6.F <- fig.6f_data %>%
 
 #figure G
 #translation error rate
-fig.6g1 <- ggplot(fig.6g1_data, aes(Strain, normal_TE, fill = Strain)) + 
+fig.5g1 <- ggplot(fig.5g1_data, aes(Strain, normal_TE, fill = Strain)) + 
   geom_boxplot(size = 0.4) + 
   geom_jitter(width = 0.1, size = 0.8) + 
   facet_wrap(~treatment, labeller = as_labeller(c(`1` = "DMSO", ConA = "ConA"))) + 
@@ -153,7 +153,7 @@ fig.6g1 <- ggplot(fig.6g1_data, aes(Strain, normal_TE, fill = Strain)) +
         strip.text = element_text(size=8,color = "black",face = "bold"))
 
 #chronological lifespan
-fig.6g2 <- ggplot(fig.6g2_data, aes(Strain, normal_SI, fill = Strain)) + 
+fig.5g2 <- ggplot(fig.5g2_data, aes(Strain, normal_SI, fill = Strain)) + 
   geom_boxplot(size = 0.4) + 
   geom_jitter(width = 0.1, size = 0.8) + 
   facet_wrap(~treatment, labeller = as_labeller(c(`1` = "DMSO", ConA = "ConA"))) + 
@@ -173,11 +173,11 @@ fig.6g2 <- ggplot(fig.6g2_data, aes(Strain, normal_SI, fill = Strain)) +
 
 
 ###save
-ggsave(paste("./Fig.6.A_", Sys.Date(), ".pdf", sep = ""), FIG6.A, width = 13+1, height = 6, units = "cm")
-ggsave(paste("./Fig.6.B_", Sys.Date(), ".pdf", sep = ""), FIG6.B, width = 9, height = 6-0.5, units = "cm")
-ggsave(paste("./Fig.6.C_", Sys.Date(), ".pdf", sep = ""), FIG6.C, width = 4.5, height = 6-1.5, units = "cm")
-ggsave(paste("./Fig.6.D_", Sys.Date(), ".pdf", sep = ""), FIG6.D, width = 4.5, height = 6-1.5, units = "cm")
-ggsave(paste("./Fig.6.E_", Sys.Date(), ".pdf", sep = ""), FIG6.E, width = 8, height = 6-1, units = "cm")
-ggsave(paste("./Fig.6.F_", Sys.Date(), ".pdf", sep = ""), FIG6.F, width = 4, height = 6-0.5, units = "cm")
-ggsave(paste("./Fig.6g1_", Sys.Date(), ".pdf", sep = ""), fig.6g1, width = 6-0.5, height = 6-0.5, units = "cm")
-ggsave(paste("./Fig.6g2_", Sys.Date(), ".pdf", sep = ""), fig.6g2, width = 6-0.5, height = 6-0.5, units = "cm")
+ggsave(paste("./Fig.5.A_", Sys.Date(), ".pdf", sep = ""), FIG5.A, width = 13+1, height = 6, units = "cm")
+ggsave(paste("./Fig.5.B_", Sys.Date(), ".pdf", sep = ""), FIG5.B, width = 9, height = 6-0.5, units = "cm")
+ggsave(paste("./Fig.5.C_", Sys.Date(), ".pdf", sep = ""), FIG5.C, width = 4.5, height = 6-1.5, units = "cm")
+ggsave(paste("./Fig.5.D_", Sys.Date(), ".pdf", sep = ""), FIG5.D, width = 4.5, height = 6-1.5, units = "cm")
+ggsave(paste("./Fig.5.E_", Sys.Date(), ".pdf", sep = ""), FIG5.E, width = 8, height = 6-1, units = "cm")
+ggsave(paste("./Fig.5.F_", Sys.Date(), ".pdf", sep = ""), FIG5.F, width = 4, height = 6-0.5, units = "cm")
+ggsave(paste("./Fig.5g1_", Sys.Date(), ".pdf", sep = ""), fig.5g1, width = 6-0.5, height = 6-0.5, units = "cm")
+ggsave(paste("./Fig.5g2_", Sys.Date(), ".pdf", sep = ""), fig.5g2, width = 6-0.5, height = 6-0.5, units = "cm")
