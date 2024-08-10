@@ -6,14 +6,14 @@ library(patchwork)
 
 
 ###load data
-load("./Data_for_Fig3.RData")
+load("./Data_for_Fig2.RData")
 
 
 ###MAIN
-##Fig3.b
-fig.3b_color <- c("#41933e", "#73c371")
+##Fig2.b
+fig.2b_color <- c("#41933e", "#73c371")
 
-FIG.3b <- ggplot(FIG.3b_For_plot_ob,aes(glu_concentration,SI,color=glu_concentration,fill=glu_concentration))+
+FIG.2b <- ggplot(FIG.2b_For_plot_ob,aes(glu_concentration,SI,color=glu_concentration,fill=glu_concentration))+
   geom_bar(stat="summary",fun=mean,position="dodge")+
   geom_jitter(width = 0.2, size = 1.5)+
   stat_summary(fun.data = 'mean_sd', geom = "errorbar", width = 0.5)+
@@ -21,7 +21,7 @@ FIG.3b <- ggplot(FIG.3b_For_plot_ob,aes(glu_concentration,SI,color=glu_concentra
                      method.args = list(alternative = "greater"), comparisons = list(c("0.5", "2")), size = 8/.pt)+
   scale_y_continuous(limits = c(0, 13), breaks = seq(0, 12, 3), labels = seq(0, 12, 3))+
   scale_color_manual(values = rep("black", 2))+
-  scale_fill_manual(values = fig.3b_color)+
+  scale_fill_manual(values = fig.2b_color)+
   labs(x="Glucose concentration (%)",y="Lifespan")+
   theme_classic()+theme(axis.text=element_text(size=9),
                         axis.title = element_text(size=10,face = "bold"),
@@ -31,8 +31,8 @@ FIG.3b <- ggplot(FIG.3b_For_plot_ob,aes(glu_concentration,SI,color=glu_concentra
                         panel.grid.minor=element_blank(),
                         legend.position = "none")
 
-##Fig3.c
-FIG.3.c <- fig.3c_data %>%
+##Fig2.c
+FIG.2.c <- fig.2c_data %>%
   ggplot()+
   geom_point(aes(x=SI_mean_bio.x,y=SI_mean_bio.y))+
   geom_smooth(aes(x=SI_mean_bio.x,y=SI_mean_bio.y),method = "lm",se = F, color = "#4daf4a")+
@@ -48,8 +48,8 @@ FIG.3.c <- fig.3c_data %>%
                         axis.text.x = element_text(),
                         panel.grid.major=element_blank(),panel.grid.minor=element_blank())
 
-##Fig3.d
-FIG3.D1 <- fig.3d1_data %>% 
+##Fig2.d
+FIG2.D1 <- fig.2d1_data %>% 
   ggplot()+
   stat_bin(aes(SI_mean_bio), geom = "bar", bins = 30, fill = colorRampPalette(colors = c("#aadaa8", "#295c27"))(30))+
   geom_vline(aes(xintercept = 8.33,color="BY"),key_glyph="path",linewidth=1,show.legend = T,linetype=2)+
@@ -60,14 +60,14 @@ FIG3.D1 <- fig.3d1_data %>%
   coord_cartesian(xlim = c(0, 15))+
   labs(x="",y="Count")+
   theme_classic()+theme(axis.text=element_text(size=9,face = "bold", color = "black"),
-    axis.title = element_text(size=10,face = "bold"),
-    axis.text.x = element_blank(),axis.ticks.x = element_blank(),
-    panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
-    legend.position = c(0.15,0.80),legend.text = element_text(size=8))
+                        axis.title = element_text(size=10,face = "bold"),
+                        axis.text.x = element_blank(),axis.ticks.x = element_blank(),
+                        panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
+                        legend.position = c(0.15,0.80),legend.text = element_text(size=8))
 
-BY_SI_for_PLOT <- fig.3d2_data %>% filter(strains == "BY")
-RM_SI_for_PLOT <- fig.3d2_data %>% filter(strains == "RM")
-FIG3.D2 <- fig.3d2_data %>%
+BY_SI_for_PLOT <- fig.2d2_data %>% filter(strains == "BY")
+RM_SI_for_PLOT <- fig.2d2_data %>% filter(strains == "RM")
+FIG2.D2 <- fig.2d2_data %>%
   ggplot()+
   geom_point(aes(x=SI_mean_bio,y=reorder(strains,SI_mean_bio), 
                  color = SI_mean_bio), size = 0.01)+
@@ -85,14 +85,14 @@ FIG3.D2 <- fig.3d2_data %>%
   scale_color_gradient(low = "#aadaa8", high = "#295c27")+
   labs(x="Lifespan",y="Strains")+
   theme_classic()+theme(axis.text=element_text(size=9,face = "bold", color = "black"),
-    axis.title = element_text(size=10,face = "bold"),
-    axis.text.y = element_blank(),axis.ticks.y =element_blank(), 
-    panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
-    legend.position = "none")
+                        axis.title = element_text(size=10,face = "bold"),
+                        axis.text.y = element_blank(),axis.ticks.y =element_blank(), 
+                        panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
+                        legend.position = "none")
 
-FIG3.D1/FIG3.D2 -> Fig3.D
+FIG2.D1/FIG2.D2 -> Fig2.D
 
 ###save
-ggsave(paste("./Fig3.b_", Sys.Date(), ".pdf", sep = ""), FIG.3b, width = 9, height = 6, units = "cm")
-ggsave(paste("./Fig3.c_", Sys.Date(), ".pdf", sep = ""), FIG.3.c, width = 9, height = 6, units = "cm")
-ggsave(paste("./Fig3.d_", Sys.Date(), ".pdf", sep = ""), Fig3.D, width = 9, height = 12, units = "cm")
+ggsave(paste("./Fig2.b_", Sys.Date(), ".pdf", sep = ""), FIG.2b, width = 9, height = 6, units = "cm")
+ggsave(paste("./Fig2.c_", Sys.Date(), ".pdf", sep = ""), FIG.2.c, width = 9, height = 6, units = "cm")
+ggsave(paste("./Fig2.d_", Sys.Date(), ".pdf", sep = ""), Fig2.D, width = 9, height = 12, units = "cm")
