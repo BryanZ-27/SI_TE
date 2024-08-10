@@ -6,18 +6,18 @@ library(cowplot)
 
 
 ###load data
-load("./Data_for_FigS2.RData")
+load("./Data_for_FigS1.RData")
 
 
 
 ###main
 ##set colors
-figs2_color <- c("#97cd96", "#70bb6f", "#4da74a", "#3b8239", "#285a2f")
+figs1_color <- c("#97cd96", "#70bb6f", "#4da74a", "#3b8239", "#285a2f")
 
 
-##s2 alter D
+##s1 alter D
 #adjust y-axis
-figs2_alterD_data <- figs2_alterD_data_final %>%
+figs1_alterD_data <- figs1_alterD_data_final %>%
   filter(Ed_cutoff != 0.08) %>% 
   mutate(adjust_rho = -rho*30) %>% 
   group_by(Ed_cutoff, P) %>%
@@ -28,7 +28,7 @@ figs2_alterD_data <- figs2_alterD_data_final %>%
   mutate(adjust_mean_p.value = log10(mean_p.value)*3-2)
 
 #draw figures with different D
-fig.s2.D <- figs2_alterD_data %>% 
+fig.s1.D <- figs1_alterD_data %>% 
   ggplot() +
   geom_bar(aes(x = P, y = adjust_mean_rho, fill = as.factor(P)), 
            stat = "identity", position = position_dodge(width = 0.10), width = 0.10) +
@@ -38,14 +38,14 @@ fig.s2.D <- figs2_alterD_data %>%
                     ymax = adjust_mean_rho + adjust_sd_rho, color = as.factor(P)), 
                 stat = "identity", position = position_dodge(width = 0.10), width = 0.05) + 
   geom_point(aes(x = P, y = adjust_mean_p.value, fill = as.factor(P)), 
-             position = position_dodge(width = 0.10), size=2, color = rep(figs2_color, 4), shape = 21) +
+             position = position_dodge(width = 0.10), size=2, color = rep(figs1_color, 4), shape = 21) +
   geom_abline(slope = 0, intercept = log10(0.05)*3-2, color = "red", linewidth = 0.8, linetype = 2) +
   geom_abline(slope = 0, intercept = 0, color = "white", linewidth = 5) +
   facet_grid(rows = vars(Ed_cutoff)) +
   geom_text(aes(label = paste("italic(D)==", Ed_cutoff, sep = "")), 
             x = -0.05, y = 20, parse = T, hjust = 0, size = 8/.pt) +
-  scale_fill_manual(values = figs2_color) +
-  scale_color_manual(values = figs2_color) +
+  scale_fill_manual(values = figs1_color) +
+  scale_color_manual(values = figs1_color) +
   scale_x_continuous(limits = c(-0.1, 0.9), breaks = seq(0, 0.8, 0.2), labels = c("0%", "20%", "40%", "60%", "80%")) +
   scale_y_continuous(limits = c(-23, 24), 
                      breaks=c(-20, -14, -8, -2, 2, 8, 14, 20), 
@@ -64,9 +64,9 @@ fig.s2.D <- figs2_alterD_data %>%
         legend.position = "none")
 
 
-##s2 alter alpha
+##s1 alter alpha
 #adjust y-axis
-figs2_alterA_data <- figs2_alterA_data_final %>% 
+figs1_alterA_data <- figs1_alterA_data_final %>% 
   filter(Alpha != 1.8) %>% 
   mutate(adjust_rho = -rho*30) %>% 
   group_by(Alpha, P) %>%
@@ -77,7 +77,7 @@ figs2_alterA_data <- figs2_alterA_data_final %>%
   mutate(adjust_mean_p.value = log10(mean_p.value)*3-2)
 
 #draw figures with different alpha
-fig.s2.A <- figs2_alterA_data %>% 
+fig.s1.A <- figs1_alterA_data %>% 
   ggplot()+
   geom_bar(aes(x = P, y = adjust_mean_rho, fill = as.factor(P)), 
            stat = "identity", position = position_dodge(width = 0.10), width = 0.10) +
@@ -87,13 +87,13 @@ fig.s2.A <- figs2_alterA_data %>%
                     ymax = adjust_mean_rho + adjust_sd_rho, color = as.factor(P)), 
                 stat = "identity", position = position_dodge(width = 0.10), width = 0.05) + 
   geom_point(aes(x = P, y = adjust_mean_p.value, fill = as.factor(P)), 
-             position = position_dodge(width = 0.10), size = 2, color = rep(figs2_color, 4), shape=21) +
+             position = position_dodge(width = 0.10), size = 2, color = rep(figs1_color, 4), shape=21) +
   geom_abline(slope = 0, intercept = log10(0.05)*3-2, color = "red", linewidth = 0.8, linetype = 2) +
   geom_abline(slope = 0, intercept = 0, color = "white", linewidth = 5) +
   facet_grid(rows = vars(Alpha)) +
   geom_text(aes(label = paste("alpha==", Alpha, sep = "")), x = -0.05, y = 20, parse = T, hjust = 0, size = 8/.pt) +
-  scale_fill_manual(values = figs2_color) +
-  scale_color_manual(values = figs2_color) +
+  scale_fill_manual(values = figs1_color) +
+  scale_color_manual(values = figs1_color) +
   scale_x_continuous(limits = c(-0.1,0.9), breaks = seq(0, 0.8, 0.2), labels = c("0%", "20%", "40%", "60%", "80%")) +
   scale_y_continuous(limits = c(-23, 24), 
                      breaks = c(-20, -14, -8, -2, 2, 8, 14, 20), 
@@ -112,9 +112,9 @@ fig.s2.A <- figs2_alterA_data %>%
         legend.position = "none")
 
 
-##s2 alter U
+##s1 alter U
 #adjust y-axis
-figs2_alterU_data <- figs2_alterU_data_final %>%
+figs1_alterU_data <- figs1_alterU_data_final %>%
   mutate(adjust_rho = -rho*30) %>% 
   group_by(Em, P) %>%
   summarise(mean_rho = mean(rho), sd_rho = sd(rho), 
@@ -124,7 +124,7 @@ figs2_alterU_data <- figs2_alterU_data_final %>%
   mutate(adjust_mean_p.value = log10(mean_p.value)*3-2)
 
 #draw figures with different U
-fig.s2.U <- figs2_alterU_data %>% 
+fig.s1.U <- figs1_alterU_data %>% 
   ggplot() +
   geom_bar(aes(x = P, y = adjust_mean_rho, fill = as.factor(P)), 
            stat = "identity", position = position_dodge(width = 0.10), width = 0.10) +
@@ -134,13 +134,13 @@ fig.s2.U <- figs2_alterU_data %>%
                     ymax = adjust_mean_rho + adjust_sd_rho, color = as.factor(P)), 
                 stat = "identity", position = position_dodge(width = 0.10), width = 0.05) + 
   geom_point(aes(x = P, y = adjust_mean_p.value, fill = as.factor(P)), 
-             position = position_dodge(width = 0.10), size = 2, color = rep(figs2_color, 4), shape = 21) +
+             position = position_dodge(width = 0.10), size = 2, color = rep(figs1_color, 4), shape = 21) +
   geom_abline(slope = 0, intercept = log10(0.05)*3-2, color = "red", linewidth = 0.8, linetype = 2) +
   geom_abline(slope = 0, intercept = 0, color = "white", linewidth = 5) +
   facet_grid(rows = vars(Em)) +
   geom_text(aes(label = paste("italic(U)==", Em, sep = "")), x = -0.05, y = 20, parse = T, hjust = 0, size = 8/.pt) +
-  scale_fill_manual(values = figs2_color) +
-  scale_color_manual(values = figs2_color) +
+  scale_fill_manual(values = figs1_color) +
+  scale_color_manual(values = figs1_color) +
   scale_x_continuous(limits = c(-0.1,0.9), breaks = seq(0, 0.8, 0.2), labels = c("0%", "20%", "40%", "60%", "80%")) +
   scale_y_continuous(limits = c(-23, 24), 
                      breaks = c(-20, -14, -8, -2, 2, 8, 14, 20), 
@@ -159,9 +159,9 @@ fig.s2.U <- figs2_alterU_data %>%
         legend.position = "none")
 
 
-##s2 alter L
+##s1 alter L
 #adjust y-axis
-figs2_alterL_data <- figs2_alterL_data_final %>%
+figs1_alterL_data <- figs1_alterL_data_final %>%
   filter(El != 7e-4) %>% 
   mutate(adjust_rho = -rho*30) %>% 
   group_by(El, P) %>%
@@ -172,7 +172,7 @@ figs2_alterL_data <- figs2_alterL_data_final %>%
   mutate(adjust_mean_p.value = log10(mean_p.value)*3-2)
 
 #draw figures with different L
-fig.s2.L <- figs2_alterL_data %>% 
+fig.s1.L <- figs1_alterL_data %>% 
   ggplot() +
   geom_bar(aes(x = P, y = adjust_mean_rho, fill = as.factor(P)), 
            stat = "identity", position = position_dodge(width = 0.10), width = 0.10) +
@@ -182,13 +182,13 @@ fig.s2.L <- figs2_alterL_data %>%
                     ymax = adjust_mean_rho + adjust_sd_rho, color = as.factor(P)), 
                 stat = "identity", position = position_dodge(width = 0.10), width = 0.05) + 
   geom_point(aes(x = P, y = adjust_mean_p.value, fill = as.factor(P)), 
-             position = position_dodge(width = 0.10), size = 2, color = rep(figs2_color, 4), shape = 21) +
+             position = position_dodge(width = 0.10), size = 2, color = rep(figs1_color, 4), shape = 21) +
   geom_abline(slope = 0, intercept = log10(0.05)*3-2, color = "red", linewidth = 0.8, linetype = 2) +
   geom_abline(slope = 0, intercept = 0, color = "white", linewidth = 5) +
   facet_grid(rows = vars(El)) +
   geom_text(aes(label = paste("italic(L)==", El, sep = "")), x = -0.05, y = 20, parse = T, hjust = 0, size = 8/.pt) +
-  scale_fill_manual(values = figs2_color) +
-  scale_color_manual(values = figs2_color) +
+  scale_fill_manual(values = figs1_color) +
+  scale_color_manual(values = figs1_color) +
   scale_x_continuous(limits = c(-0.1,0.9), breaks = seq(0, 0.8, 0.2), labels = c("0%", "20%", "40%", "60%", "80%")) +
   scale_y_continuous(limits = c(-23, 24), 
                      breaks=c(-20, -14, -8, -2, 2, 8, 14, 20), 
@@ -208,13 +208,13 @@ fig.s2.L <- figs2_alterL_data %>%
 
 
 ##combine figures
-fig.s2 <- ggdraw()+
-  draw_plot(fig.s2.D, x = 0, y = 0, width = 0.25, height = 1) +
-  draw_plot(fig.s2.A, x = 0.25, y = 0, width = 0.25, height = 1) +
-  draw_plot(fig.s2.U, x = 0.50, y = 0, width = 0.25, height = 1) +
-  draw_plot(fig.s2.L, x = 0.75, y = 0, width = 0.25, height = 1)
+fig.s1 <- ggdraw()+
+  draw_plot(fig.s1.D, x = 0, y = 0, width = 0.25, height = 1) +
+  draw_plot(fig.s1.A, x = 0.25, y = 0, width = 0.25, height = 1) +
+  draw_plot(fig.s1.U, x = 0.50, y = 0, width = 0.25, height = 1) +
+  draw_plot(fig.s1.L, x = 0.75, y = 0, width = 0.25, height = 1)
 
 
 
 ###save
-ggsave(paste("./FigS2_", Sys.Date(), ".pdf", sep = ""), fig.s2, width = 17, height = 22, units = "cm")
+ggsave(paste("./FigS1_", Sys.Date(), ".pdf", sep = ""), fig.s1, width = 17, height = 22, units = "cm")
