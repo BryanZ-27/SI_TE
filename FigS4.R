@@ -4,17 +4,17 @@ library(ggplot2)
 
 
 ###load data
-load("./Data_for_FigS5.RData")
+load("./Data_for_FigS4.RData")
 
 
 
 ###main
-FigureS5 <- ggplot()+
-  geom_point(aes(mean_score, no, color = mean_score), fig.s5a_summ, size = 0.1)+
+FigureS4 <- ggplot()+
+  geom_point(aes(mean_score, no, color = mean_score), fig.s4a_summ, size = 0.1)+
   geom_errorbar(aes(xmin = mean_score - sd_score, 
                     xmax = ifelse(mean_score + sd_score > 1, 1, mean_score + sd_score), 
-                    y = no, color = mean_score), fig.s5a_summ, width = 0.1, linewidth = 0.1)+
-  geom_freqpoly(aes(value), fig.s5b_data, color = "#8dc1ec") + 
+                    y = no, color = mean_score), fig.s4a_summ, width = 0.1, linewidth = 0.1)+
+  geom_freqpoly(aes(value), fig.s4b_data, color = "#8dc1ec") + 
   scale_color_gradient(low = "#2075bc", high = "#124168")+
   scale_x_continuous(name = "The fraction of reads consistent with 
   the genotype data among all reads 
@@ -31,4 +31,4 @@ FigureS5 <- ggplot()+
 
 
 ###save
-ggsave(paste("./Fig.S5_", Sys.Date(), ".pdf", sep = ""), FigureS5, width = 8, height = 9, units = "cm")
+ggsave(paste("./Fig.S4_", Sys.Date(), ".pdf", sep = ""), FigureS4, width = 8, height = 9, units = "cm")
