@@ -7,13 +7,13 @@ library(patchwork)
 
 
 ###load data
-load("./Data_for_Fig4.RData")
+load("./Data_for_Fig3.RData")
 
 
 
 ###main
-#figure 4.b
-FIG.4.B <- fig.4b_data %>%
+#figure 3.b
+FIG.3.B <- fig.3b_data %>%
   ggplot() +
   geom_hex(aes(x=`F`,y=`R`),bins = 11)+
   geom_smooth(aes(x=`F`,y=`R`), method = "lm", formula = y ~ x + 0, se = F, color = "#027ee1")+
@@ -31,8 +31,8 @@ FIG.4.B <- fig.4b_data %>%
                         legend.background = element_blank(),legend.title =element_blank(),
                         legend.text = element_text(size = 8))
 
-#figure 4.c
-FIG.4.C <- fig.4c_data %>%
+#figure 3.c
+FIG.3.C <- fig.3c_data %>%
   ggplot() +
   geom_hex(aes(x=`F`,y=`R`),bins = 11)+
   geom_smooth(aes(x=`F`,y=`R`), method = "lm", formula = y ~ x + 0, se = F, color = "#027ee1")+
@@ -50,8 +50,8 @@ FIG.4.C <- fig.4c_data %>%
                         legend.background = element_blank(),legend.title =element_blank(), 
                         legend.text = element_text(size = 8))
 
-#figure 4.d1
-FIG.4.D1 <- fig.4d_data %>%
+#figure 3.d1
+FIG.3.D1 <- fig.3d_data %>%
   ggplot()+
   stat_bin(aes(TE_mean_bio), geom = "bar", bins = 30, fill = colorRampPalette(colors = c("#98c0e0", "#1c405d"))(30))+
   geom_vline(aes(xintercept = 0.000813,color="BY"),key_glyph="path",linewidth=1,show.legend = T,linetype=2)+
@@ -67,8 +67,8 @@ FIG.4.D1 <- fig.4d_data %>%
                         panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
                         legend.position = c(0.15,0.80),legend.text = element_text(size=8))
 
-#figure 4.d2
-FIG.4.D2 <- fig.4d_data %>%
+#figure 3.d2
+FIG.3.D2 <- fig.3d_data %>%
   bind_rows(BY_TE_for_strain_data,RM_TE_for_strain_data) %>%
   ungroup() %>%
   ggplot()+
@@ -94,11 +94,11 @@ FIG.4.D2 <- fig.4d_data %>%
                         panel.grid.major=element_blank(),panel.grid.minor=element_blank(), 
                         legend.position = "none")
 
-FIG.4.D1/FIG.4.D2 -> Fig.4.D
+FIG.3.D1/FIG.3.D2 -> Fig.3.D
 
 
 
 ###save
-ggsave(paste("./Fig.4.B_", Sys.Date(), ".pdf", sep = ""), FIG.4.B, width = 9, height = 6, units = "cm")
-ggsave(paste("./Fig.4.C_", Sys.Date(), ".pdf", sep = ""), FIG.4.C, width = 9, height = 6, units = "cm")
-ggsave(paste("./Fig.4.D_", Sys.Date(), ".pdf", sep = ""), Fig.4.D, width = 9, height = 12, units = "cm")
+ggsave(paste("./Fig.3.B_", Sys.Date(), ".pdf", sep = ""), FIG.3.B, width = 9, height = 6, units = "cm")
+ggsave(paste("./Fig.3.C_", Sys.Date(), ".pdf", sep = ""), FIG.3.C, width = 9, height = 6, units = "cm")
+ggsave(paste("./Fig.3.D_", Sys.Date(), ".pdf", sep = ""), Fig.3.D, width = 9, height = 12, units = "cm")
