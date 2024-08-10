@@ -5,12 +5,12 @@ library(ggplot2)
 
 
 ###load data
-load("./Data_for_FigS4.RData")
+load("./Data_for_FigS3.RData")
 
 
 
 ###main
-Fig.S4 <- fig.s4_data %>%
+Fig.S3 <- fig.s3_data %>%
   ggplot(aes(x=OD_range, y=OD_time_shift, fill=`Correlation with the star`,group=interaction(Calculate_Method)))+
   geom_tile()+
   scale_fill_gradient(low = "#FFFFDF", high = "#D73027")+
@@ -29,4 +29,4 @@ Fig.S4 <- fig.s4_data %>%
 
 
 ###save
-ggsave(paste("./Fig.S4_", Sys.Date(), ".pdf", sep = ""), Fig.S4, width = 12, height = 8-0.5, units = "cm")
+ggsave(paste("./Fig.S3_", Sys.Date(), ".pdf", sep = ""), Fig.S3, width = 12, height = 8-0.5, units = "cm")
