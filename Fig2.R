@@ -4,12 +4,12 @@ library(ggplot2)
 
 
 ###load data
-load("./Data_for_Fig2.RData")
+load("./Data_for_Fig1.RData")
 
 
 ###main
 #adjust y-axis
-data_for_fig2_adjusted <- data_for_fig2_final %>%
+data_for_fig1_adjusted <- data_for_fig1_final %>%
   mutate(adjust_rho = -rho*20) %>% 
   group_by(P) %>%
   summarise(mean_rho = mean(rho), sd_rho = sd(rho), 
@@ -19,10 +19,10 @@ data_for_fig2_adjusted <- data_for_fig2_final %>%
   mutate(adjust_mean_p.value = log10(mean_p.value)*3-0.5)
 
 #set colors
-color_for_fig2 <- c("#90cb9c", "#70bd79", "#57aa56", "#4d8544", "#375b33")
+color_for_fig1 <- c("#90cb9c", "#70bd79", "#57aa56", "#4d8544", "#375b33")
 
 #draw main figure
-fig2.e <- data_for_fig2_adjusted %>% 
+fig1.e <- data_for_fig1_adjusted %>% 
   ggplot() +
   geom_bar(aes(x = P, y = adjust_mean_rho, fill = as.factor(P)), 
            stat = "identity", position = position_dodge(width = 0.15), width = 0.10) +
@@ -59,10 +59,10 @@ fig2.e <- data_for_fig2_adjusted %>%
         axis.line.x = element_blank())
 
 #draw zoom1 figure
-fig2.e_zoom1 <- data_for_fig2_zoom1 %>% 
+fig1.e_zoom1 <- data_for_fig1_zoom1 %>% 
   ggplot() +
   geom_point(aes(x = Fake_E, y = Fake_T), size = 1) +
-  geom_smooth(aes(x = Fake_E, y = Fake_T), method = "lm", se = F, color = color_for_fig2[1]) +
+  geom_smooth(aes(x = Fake_E, y = Fake_T), method = "lm", se = F, color = color_for_fig1[1]) +
   scale_x_continuous(limits = c(0.0005, 0.0020), breaks = c(seq(0.0005, 0.0020, 0.0005)), labels = c(seq(5, 20, 5)))+
   scale_y_continuous(breaks = c(seq(0, 10, 5)), labels = c(seq(0, 10, 5)), limits = c(0, 10))+
   labs(x = "", y = "Lifespan") +
@@ -75,10 +75,10 @@ fig2.e_zoom1 <- data_for_fig2_zoom1 %>%
         panel.grid.minor = element_blank())
 
 #draw zoom2 figure
-fig2.e_zoom2 <- data_for_fig2_zoom2 %>% 
+fig1.e_zoom2 <- data_for_fig1_zoom2 %>% 
   ggplot() +
   geom_point(aes(x = Fake_E, y = Fake_T), size = 1) +
-  geom_smooth(aes(x = Fake_E, y = Fake_T), method = "lm", se = F, color = color_for_fig2[3]) +
+  geom_smooth(aes(x = Fake_E, y = Fake_T), method = "lm", se = F, color = color_for_fig1[3]) +
   scale_x_continuous(limits = c(0.0005, 0.0020), breaks = c(seq(0.0005, 0.0020, 0.0005)), labels = c(seq(5, 20, 5)))+
   scale_y_continuous(breaks = c(seq(0, 10, 5)), labels = c(seq(0, 10, 5)), limits = c(0, 10))+
   labs(x = "", y = "Lifespan") +
@@ -91,10 +91,10 @@ fig2.e_zoom2 <- data_for_fig2_zoom2 %>%
         panel.grid.minor = element_blank())
 
 #draw zoom3 figure
-fig2.e_zoom3 <- data_for_fig2_zoom3 %>% 
+fig1.e_zoom3 <- data_for_fig1_zoom3 %>% 
   ggplot()+
   geom_point(aes(x = Fake_E, y = Fake_T), size = 1) +
-  geom_smooth(aes(x = Fake_E, y = Fake_T), method = "lm", se = F, color = color_for_fig2[5]) +
+  geom_smooth(aes(x = Fake_E, y = Fake_T), method = "lm", se = F, color = color_for_fig1[5]) +
   scale_x_continuous(limits = c(0.0005, 0.0020), breaks = c(seq(0.0005, 0.0020, 0.0005)), labels = c(seq(5, 20, 5))) +
   scale_y_continuous(breaks = c(seq(0, 10, 5)), labels = c(seq(0, 10, 5)), limits = c(0, 10)) +
   labs(x="", y="Lifespan") +
@@ -108,7 +108,7 @@ fig2.e_zoom3 <- data_for_fig2_zoom3 %>%
 
 
 ###save
-ggsave(paste("./Fig2.e_", Sys.Date(), ".pdf", sep = ""), fig2.e, width = 32, height = 24, units = "cm")
-ggsave(paste("./Fig2.e_zoom1_", Sys.Date(), ".pdf", sep = ""), fig2.e_zoom1, width = 8, height = 6, units = "cm")
-ggsave(paste("./Fig2.e_zoom2_", Sys.Date(), ".pdf", sep = ""), fig2.e_zoom2, width = 8, height = 6, units = "cm")
-ggsave(paste("./Fig2.e_zoom3_", Sys.Date(), ".pdf", sep = ""), fig2.e_zoom3, width = 8, height = 6, units = "cm")
+ggsave(paste("./Fig1.e_", Sys.Date(), ".pdf", sep = ""), fig1.e, width = 32, height = 24, units = "cm")
+ggsave(paste("./Fig1.e_zoom1_", Sys.Date(), ".pdf", sep = ""), fig1.e_zoom1, width = 8, height = 6, units = "cm")
+ggsave(paste("./Fig1.e_zoom2_", Sys.Date(), ".pdf", sep = ""), fig1.e_zoom2, width = 8, height = 6, units = "cm")
+ggsave(paste("./Fig1.e_zoom3_", Sys.Date(), ".pdf", sep = ""), fig1.e_zoom3, width = 8, height = 6, units = "cm")
