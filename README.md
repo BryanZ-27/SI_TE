@@ -7,8 +7,9 @@ This repository, `SI_TE`, contains the code and data used to support the paper "
 ### Code Files
 - **R Scripts**: Multiple files with the `.R` extension, each responsible for different analysis tasks.
     - `1.model_simulation.R`: Used to simulate the models involved in the paper. By simulating different parameters and conditions, it validates relevant theories and hypotheses.
-    - `3.SI_QC.R`, `5.TE_QC.R`: Used for quality control of raw data.
     - `2.Fig1_FigS1.R`, `4.Fig2_FigS2_FigS3.R`, etc.: These scripts are used to generate the figures in the paper.
+    - `3.SI_QC.R`, `5.TE_QC.R`: Used for quality control of raw data.
+    - `3_1.SRver5-1_function.R`, `3_2.SI_biorep_clean_function.R`, etc.: These scripts containing functions used in quality control of raw data.
 
 ### Data Files
 - **All data is stored in the `data.zip` file.**
