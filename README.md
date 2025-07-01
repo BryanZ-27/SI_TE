@@ -13,10 +13,7 @@ This repository, `SI_TE`, contains the code and data used to support the paper "
 
 ### Data Files
 - **All data is stored in the `data.zip` file.**
-- **`.Rdata` Files**: Such as `2.cor_filter_P_data_200.Rdata`, `3.raw_survival_data.Rdata`, `8.chr11_2_genes.Rdata`, etc. These files store raw data, intermediate results or specific datasets from the analysis.
-- **`.txt` Files**:
-    - `8.lifespan_data.txt`: Contains the lifespan data of multiple individuals. Each line records the ID of an individual and the corresponding lifespan value, providing basic data for GWAS.
-    - `8.sex_data.txt`: Stores the gender information of individuals. Each line contains the ID of an individual and the corresponding gender identifier, which is used for genotype-conditional association test.
+- **`.Rdata` Files**: Such as `2.cor_filter_P_data_200.Rdata`, `3.raw_survival_data.Rdata`, etc. These files store raw data, intermediate results or specific datasets from the analysis.
 
 ## Code Usage Instructions
 ### Environment Requirements
@@ -48,12 +45,6 @@ source("2.Fig1_FigS1.R")
 These files can be loaded in the R environment using the `load()` function. For example:
 ```R
 load("2.cor_filter_P_data_200.Rdata")
-```
-
-### `.txt` Files
-You can use the `read.table()` or `read.csv()` functions to read them. For example, to read the lifespan data:
-```R
-lifespan_data <- read.table("8.lifespan_data.txt", header = TRUE)
 ```
 
 ## Contribution and Feedback
